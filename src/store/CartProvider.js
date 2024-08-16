@@ -1,19 +1,35 @@
-import React from 'react'
-import Card from '../components/UI/Card'
+import React, { useState } from 'react'
+import CartContext from './cart-context'
 
-const CartProvider = () => {
+const CartProvider = (props) => {
+
+  const [cartItems, setCartItems] = useState([])
+
+  const addItemToCartHandler = (item) => {
+
+
+
+    setCartItems((prevState) =>{
+      
+      return [...prevState, item]
+    })
+  }
+
+  const removeItemFromCartHandler = () => {
+
+  }
+
+  const cartContext = {
+    items: cartItems,
+    totalAmount: 0,
+    addItem: addItemToCartHandler,
+    removeItem: removeItemFromCartHandler
+  }
+
   return (
-    <Card>
-        <p>Sushi</p>
-        <div>
-            <h3>Total Amount</h3>
-            <h3>{price}</h3>
-        </div>
-        <div>
-            <button type='click' >Close</button>
-            <button type='click' >Order</button>
-        </div>
-    </Card>
+    <CartContext.Provider value={cartContext}>
+      {props.children}
+    </CartContext.Provider>
   )
 }
 

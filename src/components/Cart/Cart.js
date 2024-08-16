@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import classes from "./Cart.module.css"
 import Modal from '../UI/Modal'
 
@@ -11,6 +11,8 @@ const Cart = (props) => {
     const onCloseHandler = () =>{
         props.onClose()
     }
+
+    
 
   return (
     <Modal onClick={onCloseHandler}>
