@@ -1,45 +1,48 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Input from '../../UI/Input'
 import classes from "./MealItemForm.module.css"
 import CartContext from "../../../store/cart-context"
 
 const MealItemForm = (props) => {
 
+    const [amountIsValid, setAmountIsValid] = useState(true)
     const cartCtx = useContext(CartContext)
+    const amountRef = useRef()
 
     const addItemToCart = (event) => {
         event.preventDefault()
 
-        //getting the value from the DOM and converting to integer
-        let quantity = document.getElementById('amount' + props.items.id).value
-        quantity = parseInt(quantity)
+        let quantity = amountRef.current.value
+        let quantityValue = parseInt(quantity)
 
-        // checking if the product already existed, if yes, then added the new quantity to existing
-        let itemFound = cartCtx.items.filter((item) =>{
-            return item.id === props.items.id
-        })
-        if(itemFound.length){
-            quantity = itemFound[0].quantity + quantity
-        }
-
-        // Created a new item and replaced old quantity with new and set it to cart
-        const item = {...props.item, quantity:quantity}
-        cartCtx.addItem(item)
+        if(quantity.trim().length ===0 ||
+            quantityValue > 5 ||
+            quantityValue < 1){
+                setAmountIsValid(false)
+                return
+            }
+        
+        const newItem = {...props.items, quantity:quantityValue}
+        cartCtx.addItem(newItem)
     }
 
 
     return (
         <div>
             <form className={classes.form} onSubmit={addItemToCart}>
-                <Input label='Amount' input={{
+                <Input 
+                ref={amountRef}
+                label='Amount' 
+                input={{
                     id: 'amount' + props.items.id,
                     type: 'number',
                     min: 1,
                     max: 5,
                     step: 1,
-                    defaultValue: 1
+                    defaultValue: 1,
                 }} />
                 <button type='submit'>+ Add</button>
+                {!amountIsValid && <p>Please enter a valid amount</p>}
             </form>
         </div>
     )

@@ -7,10 +7,10 @@ const HeaderCartButton = (props) => {
 
   const cartCtx = useContext(CartContext)
 
-  let quantity = 0
-  cartCtx.items.forEach((item) =>{
-    quantity = quantity + item.quantity
-  })
+  let quantity = cartCtx.items.reduce((curItem, item) =>{
+    return curItem + item.quantity
+  }, 0)
+  
 
   const showCartHandler = () =>{
     props.onShowCart()
